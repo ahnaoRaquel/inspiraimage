@@ -1,4 +1,4 @@
-package io.github.ahnaoraquel.inspiraimageapi;
+package inspiraimageapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

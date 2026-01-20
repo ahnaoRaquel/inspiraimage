@@ -1,7 +1,7 @@
-package io.github.ahnaoraquel.inspiraimageapi.application.images;
+package inspiraimageapi.application.images;
 
-import io.github.ahnaoraquel.inspiraimageapi.domain.entity.Image;
-import io.github.ahnaoraquel.inspiraimageapi.domain.service.ImageService;
+import inspiraimageapi.domain.entity.Image;
+import inspiraimageapi.domain.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -25,11 +25,9 @@ public class ImagesController {
     private final ImageMapper imageMapper;
 
     @PostMapping
-    public ResponseEntity save(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("name") String name,
-            @RequestParam("tags") List<String> tags
-    ) throws IOException {
+    public ResponseEntity save(@RequestParam("file") MultipartFile file,
+                               @RequestParam("name") String name,
+                               @RequestParam("tags") List<String> tags) throws IOException {
 
         Image image = imageMapper.mapToImage(file, name, tags);
         Image savedImage = imageService.save(image);

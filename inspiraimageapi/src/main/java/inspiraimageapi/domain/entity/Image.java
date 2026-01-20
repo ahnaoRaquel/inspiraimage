@@ -1,6 +1,6 @@
-package io.github.ahnaoraquel.inspiraimageapi.domain.entity;
+package inspiraimageapi.domain.entity;
 
-import io.github.ahnaoraquel.inspiraimageapi.domain.enums.ImageExtension;
+import inspiraimageapi.domain.enums.ImageExtension;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

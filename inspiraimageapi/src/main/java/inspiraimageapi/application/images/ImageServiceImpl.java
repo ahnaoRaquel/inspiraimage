@@ -1,8 +1,8 @@
-package io.github.ahnaoraquel.inspiraimageapi.application.images;
+package inspiraimageapi.application.images;
 
-import io.github.ahnaoraquel.inspiraimageapi.domain.entity.Image;
-import io.github.ahnaoraquel.inspiraimageapi.domain.service.ImageService;
-import io.github.ahnaoraquel.inspiraimageapi.infra.repository.ImageRepository;
+import inspiraimageapi.domain.entity.Image;
+import inspiraimageapi.domain.service.ImageService;
+import inspiraimageapi.infra.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
-package io.github.ahnaoraquel.inspiraimageapi.application.images;
+package inspiraimageapi.application.images;
 
-import io.github.ahnaoraquel.inspiraimageapi.domain.entity.Image;
-import io.github.ahnaoraquel.inspiraimageapi.domain.enums.ImageExtension;
+import inspiraimageapi.domain.entity.Image;
+import inspiraimageapi.domain.enums.ImageExtension;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,16 @@ public class ImageMapper {
                 .extension(ImageExtension.valueOf(MediaType.valueOf(file.getContentType())))
                 .tags(String.join(",", tags))
                 .file(file.getBytes())
+                .build();
+    }
+
+    public ImageDTO imageToDTO(Image image, String url) {
+        return ImageDTO.builder()
+                .url(url)
+                .extension(image.getExtension().name())
+                .name(image.getName())
+                .size(image.getSize())
+                .uploadDate(image.getUploadDate().toLocalDate())
                 .build();
     }
 }

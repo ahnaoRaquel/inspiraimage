@@ -1,4 +1,4 @@
-package io.github.ahnaoraquel.inspiraimageapi.domain.enums;
+package inspiraimageapi.domain.enums;
 
 import lombok.Getter;
 import org.springframework.http.MediaType;

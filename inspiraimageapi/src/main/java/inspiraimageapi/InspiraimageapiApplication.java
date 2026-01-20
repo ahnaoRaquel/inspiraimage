@@ -1,4 +1,4 @@
-package io.github.ahnaoraquel.inspiraimageapi;
+package inspiraimageapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

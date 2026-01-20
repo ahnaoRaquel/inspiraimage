@@ -1,6 +1,6 @@
-package io.github.ahnaoraquel.inspiraimageapi.domain.service;
+package inspiraimageapi.domain.service;
 
-import io.github.ahnaoraquel.inspiraimageapi.domain.entity.Image;
+import inspiraimageapi.domain.entity.Image;
 
 import java.util.Optional;
 
