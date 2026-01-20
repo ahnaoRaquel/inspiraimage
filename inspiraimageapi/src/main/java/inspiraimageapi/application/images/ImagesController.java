@@ -1,6 +1,7 @@
 package inspiraimageapi.application.images;
 
 import inspiraimageapi.domain.entity.Image;
+import inspiraimageapi.domain.enums.ImageExtension;
 import inspiraimageapi.domain.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/images")
@@ -54,10 +56,24 @@ public class ImagesController {
         return new ResponseEntity<>(image.getFile(), headers, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<ImageDTO>> search(@RequestParam(value = "extension", required = false) String extension,
+                                                  @RequestParam(value = "query", required = false) String query) {
+
+        var result = imageService.search(ImageExtension.ofName(extension), query);
+
+        var images = result.stream().map(image -> {
+            var url = buildImageUri(image);
+            return imageMapper.imageToDTO(image, url.toString());
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(images);
+    }
+
     private URI buildImageUri(Image imageId) {
         String imagePath = "/" + imageId.getId();
         return ServletUriComponentsBuilder
-                .fromCurrentRequest()
+                .fromCurrentRequestUri()
                 .path(imagePath)
                 .build()
                 .toUri();
