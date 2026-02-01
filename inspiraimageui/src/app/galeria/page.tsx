@@ -1,9 +1,10 @@
 'use client';
 
-import { Template, ImageCard } from "@/components";
+import { Template, ImageCard, Button, InputText } from "@/components";
 import { useImageService} from "@/resources/image/image.service";
 import {useState} from "react";
 import {Image} from "@/resources/image/image.resource";
+import Link from "next/link";
 
 export default function GaleriaPage() {
 
@@ -41,17 +42,17 @@ export default function GaleriaPage() {
 
             <section className="flex flex-col items-center justify-center my-5">
                 <div className="flex space-x-4">
-                    <input type="text"
-                           onChange={event => setQuery(event.target.value)}
-                           className="border px-3 py-2 rounded-lg text-black"/>
+                    <InputText placeholder="Digite nome ou tags" onChange={event => setQuery(event.target.value)}/>
                     <select onChange={event => setExtension(event.target.value)} className="border px-4 py-2 rounded-lg text-black">
                         <option value="">Todos</option>
                         <option value="PNG">PNG</option>
                         <option value="JPEG">JPEG</option>
                         <option value="GIF">GIF</option>
                     </select>
-                    <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700" onClick={searchImages}>Buscar</button>
-                    <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700" >Adicionar imagem</button>
+                    <Button style="bg-black hover:bg-gray-700" onClick={searchImages} label="Buscar"/>
+                    <Link href="/formulario">
+                        <Button style="bg-black hover:bg-gray-700" label="Adicionar imagem" />
+                    </Link>
                 </div>
             </section>
             <section className="grid grid-cols-3 gap-4 mb-8">
