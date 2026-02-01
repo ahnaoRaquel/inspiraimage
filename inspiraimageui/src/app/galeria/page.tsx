@@ -1,5 +1,13 @@
+import { Template, ImageCard } from "@/components";
+
 export default function GaleriaPage() {
     return (
-        <h1> galeria </h1>
+        <Template >
+            <section className="grid grid-cols-3 gap-4 mb-8">
+                <ImageCard />
+                <ImageCard />
+                <ImageCard />
+            </section>
+        </Template>
     )
 }
