@@ -1,8 +1,11 @@
 'use client';
 
 import React from "react";
-import { ToastContainer } from 'react-toastify'
+import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuth} from "@/resources";
+import {useRouter} from "next/navigation";
+import Link from "next/link";
 
 interface TemplateProps {
     children: React.ReactNode;
@@ -11,25 +14,32 @@ interface TemplateProps {
 
 export const Template: React.FC<TemplateProps> = ({children, loading = false}: TemplateProps) => {
     return (
-        <>
+        <div className="min-h-screen flex flex-col">
             <Header/>
-            <div className={`${loading ? "animate-pulse" : ""} container mx-auto px-4 mt-8`}>
-                <RenderIf condition={loading}>
-                    <div className="text-center">
-                        <Loading/>
-                    </div>
-                </RenderIf>
-                {children}
-            </div>
+
+            <main className={`flex-1 ${loading ? "animate-pulse" : ""}`}>
+                <div className="container mx-auto px-4 mt-8">
+                    <RenderIf condition={loading}>
+                        <div className="text-center">
+                            <Loading/>
+                        </div>
+                    </RenderIf>
+
+                    {children}
+                </div>
+            </main>
+
             <Footer/>
-            <ToastContainer position='top-right'
-                            autoClose={8000}
-                            hideProgressBar={false}
-                            draggable={false}
-                            closeOnClick={true}
-                            pauseOnHover={true}
+
+            <ToastContainer
+                position="top-right"
+                autoClose={8000}
+                hideProgressBar={false}
+                draggable={false}
+                closeOnClick
+                pauseOnHover
             />
-        </>
+        </div>
     )
 }
 
@@ -64,10 +74,36 @@ const Loading: React.FC = () => {
 }
 
 const Header: React.FC = () => {
+
+    const auth = useAuth();
+    const user = auth.getUserSession();
+    const router = useRouter();
+
+    function logout() {
+        auth.invalidateSession();
+        router.push("/login");
+    }
+
     return (
         <header className="bg-black text-white py-3">
             <div className="container mx-auto flex justify-between items-center px-4">
-                <h1 className="text-3xl font-bold">Inspira Image</h1>
+                <Link href="/galeria">
+                    <h1 className="text-3xl font-bold">Inspira Image</h1>
+                </Link>
+                <RenderIf condition={!!user}>
+                    <div className="flex items-center">
+                        <div className="relative">
+                            <span className="w-64 py-3 px-6 text-md">
+                                Olá, {user?.name}
+                            </span>
+                            <span className="w-64 py-3 px-6 text-sm">
+                                <a href="#" onClick={logout}>
+                                    Sair
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </RenderIf>
             </div>
         </header>
     )
@@ -75,10 +111,10 @@ const Header: React.FC = () => {
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-black text-white py-4 mt-8">
-            <div className="container mx-auto text-center">
+        <footer className="bg-black text-white py-4">
+            <div className="container mx-auto text-center text-sm">
                 <p>&copy; 2026 Inspira Image. All rights reserved.</p>
-                        Desenvolvido por Raquel Niehues Andrade
+                <p>Desenvolvido por Raquel Niehues Andrade</p>
             </div>
         </footer>
     )

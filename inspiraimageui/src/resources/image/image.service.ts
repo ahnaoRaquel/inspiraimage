@@ -1,7 +1,7 @@
 import { Image } from "./image.resource";
 
 class ImageService {
-    baseUrl: string = "http://localhost:8080/v1/images";
+    baseUrl: string = process.env.NEXT_PUBLIC_API_URL + '/v1/images';
 
     async buscar(query: string = "", extension: string = "") : Promise<Image[]> {
         const url = `${this.baseUrl}?query=${query}&extension=${extension}`;

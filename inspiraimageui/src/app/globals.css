@@ -12,6 +12,12 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
+
+html,
+body {
+  height: 100%;
+}
+
 nextjs-portal {
   display: none;
 }
