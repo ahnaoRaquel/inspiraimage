@@ -33,4 +33,15 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.findByExtensionAndNameOrTagsLike(extension, query);
     }
 
+    @Override
+    @Transactional
+    public boolean deleteById(String id) {
+        if (!imageRepository.existsById(id)) {
+            return false;
+        }
+
+        imageRepository.deleteById(id);
+        return true;
+    }
+
 }
