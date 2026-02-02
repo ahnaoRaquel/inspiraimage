@@ -2,7 +2,7 @@ import React from "react";
 
 interface ButtonProps {
     style?: string;
-    label?: string;
+    label?: React.ReactNode;
     onClick?: (event: any) => void;
     type?: "submit" | "button" | "reset" | undefined
 }

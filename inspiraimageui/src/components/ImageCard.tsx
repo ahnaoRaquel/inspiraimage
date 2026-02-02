@@ -1,4 +1,5 @@
 'use client';
+import {Button} from "@/components/button";
 
 interface ImageCardProps {
     nome?: string;
@@ -6,12 +7,16 @@ interface ImageCardProps {
     dataUpload?: string;
     src?: string;
     extension?: string;
+    onDelete?: () => void;
 }
 
 export const ImageCard: React.FC<ImageCardProps> = (props: ImageCardProps) => {
 
     function download() {
         window.open(props.src, "_blank");
+    }
+    function handleDelete(e: React.MouseEvent) {
+        props.onDelete?.();
     }
 
     return (
@@ -23,6 +28,30 @@ export const ImageCard: React.FC<ImageCardProps> = (props: ImageCardProps) => {
                 <p className="text-black text-base">{formatBytes(props.tamanho)}</p>
                 <p className="text-black text-base">{props.dataUpload}</p>
             </div>
+            <Button
+                type="button"
+                style="absolute bottom-3 right-3 text-black p-1 z-10"
+                onClick={handleDelete}
+                label={
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6" />
+                        <path d="M14 11v6" />
+                        <path d="M9 6V4h6v2" />
+                    </svg>
+                }
+            />
         </div>
     )
 }

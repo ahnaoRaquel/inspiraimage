@@ -33,13 +33,24 @@ export default function GaleriaPage() {
     }
 
     function renderImageCard(image: Image) {
+        async function handleDelete() {
+            try {
+                await useService.deletar(image.id || "");
+                setImages(prev => prev.filter(img => img.id !== image.id));
+                notification.notify("Imagem excluída com sucesso.", "success");
+            } catch (error) {
+                notification.notify("Erro ao excluir imagem.", "error");
+            }
+        }
+
         return (
             <ImageCard key={image.url}
                        nome={image.name}
                        src={image.url}
                        tamanho={image.size}
                        extension={image.extension}
-                       dataUpload={image.uploadDate}/>
+                       dataUpload={image.uploadDate}
+                       onDelete={handleDelete}/>
         )
     }
 
