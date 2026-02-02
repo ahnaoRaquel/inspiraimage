@@ -1,22 +1,33 @@
 import { Image } from "./image.resource";
+import {useAuth} from "@/resources";
 
 class ImageService {
-    baseUrl: string = process.env.NEXT_PUBLIC_API_URL + '/v1/images';
+    baseURL: string = process.env.NEXT_PUBLIC_API_URL + '/v1/images';
+    auth = useAuth();
 
     async buscar(query: string = "", extension: string = "") : Promise<Image[]> {
-        const url = `${this.baseUrl}?query=${query}&extension=${extension}`;
-        const response = await fetch(url);
-        return  await response.json();
+        const userSession = this.auth.getUserSession();
+        const url = `${this.baseURL}?query=${query}&extension=${extension}`
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${userSession?.accessToken}`
+            }
+        });
+        return await response.json();
     }
 
     async salvar(dados: FormData) : Promise<string> {
-        const response = await fetch(this.baseUrl, {
+        const userSession = this.auth.getUserSession();
+        const response = await fetch(this.baseURL, {
             method: 'POST',
-            body: dados
+            body: dados,
+            headers: {
+                "Authorization": `Bearer ${userSession?.accessToken}`
+            }
         })
 
         return response.headers.get('location') ?? ''
     }
 }
 
-export const useImageService = () =>  new ImageService();
+export const useImageService = () => new ImageService();
