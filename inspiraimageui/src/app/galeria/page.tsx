@@ -2,7 +2,7 @@
 
 import {Template, ImageCard, Button, InputText, useNotification, AuthenticatedPage} from "@/components";
 import {useImageService} from "@/resources";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Image} from "@/resources/image/image.resource";
 import Link from "next/link";
 
@@ -58,6 +58,21 @@ export default function GaleriaPage() {
         return images.map(renderImageCard);
     }
 
+    function renderEmptyState() {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[300px] w-full col-span-3">
+                <h2 className="text-3xl font-bold text-black text-center">
+                    Busque imagens ou adicione uma nova
+                </h2>
+                <p className="text-gray-500 mt-2">Use a barra de pesquisa acima para começar.</p>
+            </div>
+        )
+    }
+
+    useEffect(() => {
+        searchImages();
+    }, []);
+
     return (
         <AuthenticatedPage>
             <Template loading={loading}>
@@ -78,7 +93,11 @@ export default function GaleriaPage() {
                     </div>
                 </section>
                 <section className="grid grid-cols-3 gap-4 mb-8">
-                    {renderImageCards()}
+                    {images.length > 0 ? (
+                        renderImageCards()
+                    ) : (
+                        !loading && renderEmptyState()
+                    )}
                 </section>
             </Template>
         </AuthenticatedPage>

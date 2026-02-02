@@ -110,9 +110,9 @@ export default function FormularioPage() {
                         </div>
 
                         <div className='mt-5 flex items-center justify-end gap-x-4'>
-                            <Button style='bg-black hover:bg-gray-900' type='submit' label='Save'/>
+                            <Button style='bg-black hover:bg-gray-900' type='submit' label='Salvar'/>
                             <Link href="/galeria">
-                                <Button style='bg-black hover:bg-gray-900' type='button' label='Cancel'/>
+                                <Button style='bg-black hover:bg-gray-900' type='button' label='Cancelar'/>
                             </Link>
                         </div>
                     </form>
