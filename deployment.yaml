@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  containers:
+    - name: postgres
+      image: postgres:15
+      env:
+        - name: POSTGRES_DB
+          value: inspiraimage
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-storage
+  volumes:
+    - name: postgres-storage
+      persistentVolumeClaim:
+        claimName: postgres-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inspiraimageapi
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: inspiraimageapi
+  template:
+    metadata:
+      labels:
+        app: inspiraimageapi
+    spec:
+      containers:
+        - name: inspiraimageapi
+          image: ahnaoraquel/inspiraimageapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: POSTGRES_HOST
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inspiraimageapi-service
+spec:
+  type: NodePort
+  selector:
+    app: inspiraimageapi
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inspiraimageui
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: inspiraimageui
+  template:
+    metadata:
+      labels:
+        app: inspiraimageui
+    spec:
+      containers:
+        - name: inspiraimageui
+          image: ahnaoraquel/inspiraimageui:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inspiraimageui-service
+spec:
+  type: NodePort
+  selector:
+    app: inspiraimageui
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30000

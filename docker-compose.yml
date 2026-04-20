@@ -9,9 +9,9 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./data:/var/lib/postgresql
+      - ./data:/var/lib/postgresql/18/data
     networks:
-      - ispiraimage-network
+      - inspiraimage-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -24,7 +24,7 @@ services:
     depends_on:
       - db
     networks:
-      - ispiraimage-network
+      - inspiraimage-network
 
   sbootapp:
     build:
@@ -37,7 +37,7 @@ services:
     ports:
         - '8080:8080'
     networks:
-      - ispiraimage-network
+      - inspiraimage-network
     environment:
       - "POSTGRES_HOST=db"
 
@@ -52,11 +52,11 @@ services:
     ports:
       - '3000:3000'
     networks:
-      - ispiraimage-network
+      - inspiraimage-network
     expose:
       - 3000
 
 networks:
-  ispiraimage-network:
+  inspiraimage-network:
     driver: bridge
 
