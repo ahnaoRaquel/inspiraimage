@@ -41,10 +41,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
+
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+
+                    auth.requestMatchers("/actuator/**").permitAll();
+
                     auth.requestMatchers("/v1/users/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/v1/images/**").permitAll();
                     auth.requestMatchers(HttpMethod.DELETE, "/v1/images/**").authenticated();
+
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
