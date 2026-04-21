@@ -14,23 +14,132 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prometheus-config
+  name: grafana-dashboard-inspiraimage
   namespace: default
 data:
-  prometheus.yml: |
-    global:
-      scrape_interval: 5s
-      evaluation_interval: 5s
+  inspiraimage.json: |
+    {
+      "title": "InspiraImage API - Observabilidade",
+      "uid": "inspiraimage-api",
+      "schemaVersion": 38,
+      "version": 1,
+      "refresh": "5s",
+      "panels": [
 
-    scrape_configs:
-      - job_name: prometheus
-        static_configs:
-          - targets: [localhost:9090]
+        {
+          "type": "stat",
+          "title": "CPU Usage (%)",
+          "id": 1,
+          "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "rate(process_cpu_usage[1m]) * 100",
+              "refId": "A"
+            }
+          ]
+        },
 
-      - job_name: inspiraimageapi
-        metrics_path: /actuator/prometheus
-        static_configs:
-          - targets: ['inspiraimageapi-service:8080']
+        {
+          "type": "stat",
+          "title": "Memory Used (MB)",
+          "id": 2,
+          "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "jvm_memory_used_bytes / 1024 / 1024",
+              "refId": "A"
+            }
+          ]
+        },
+
+        {
+          "type": "stat",
+          "title": "Heap Usage (%)",
+          "id": 3,
+          "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "(jvm_memory_used_bytes{area=\"heap\"} / jvm_memory_max_bytes{area=\"heap\"}) * 100",
+              "refId": "A"
+            }
+          ]
+        },
+
+        {
+          "type": "stat",
+          "title": "Threads",
+          "id": 4,
+          "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "jvm_threads_live_threads",
+              "refId": "A"
+            }
+          ]
+        },
+
+        {
+          "type": "timeseries",
+          "title": "CPU Usage Over Time",
+          "id": 5,
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "rate(process_cpu_usage[1m]) * 100",
+              "refId": "A"
+            }
+          ]
+        },
+
+        {
+          "type": "timeseries",
+          "title": "Memory Usage Over Time",
+          "id": 6,
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "jvm_memory_used_bytes",
+              "refId": "A"
+            }
+          ]
+        },
+
+        {
+          "type": "timeseries",
+          "title": "HTTP Requests Rate",
+          "id": 7,
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "rate(http_server_requests_seconds_count[1m])",
+              "refId": "A"
+            }
+          ]
+        },
+
+        {
+          "type": "timeseries",
+          "title": "HTTP Latency (ms)",
+          "id": 8,
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            {
+              "expr": "rate(http_server_requests_seconds_sum[1m]) / rate(http_server_requests_seconds_count[1m]) * 1000",
+              "refId": "A"
+            }
+          ]
+        }
+
+      ]
+    }
 
 ---
 apiVersion: apps/v1
